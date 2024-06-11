@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-// const { Op } = require('sequelize');
 const Product = require('./Product');
 
 const addProduct = async (req, res) => {
@@ -41,7 +40,8 @@ const editProduct = async (req, res) => {
         }else if(!req.file){
             const product = await Product.findByPk(req.body.id);
             Product.update({
-                description: req.body.description,
+                name: req.body.name,
+                price: req.body.price
             },
             {
                 where: {id: req.body.id}
@@ -57,7 +57,7 @@ const editProduct = async (req, res) => {
 const deleteProductByID = async (req, res) => {
     try {
         const product = await Product.findByPk(req.params.id)
-        fs.unlinkSync(path.join(__dirname + '../../../public' + product.image));
+        fs.unlinkSync(path.join(__dirname + '../../../public/' + product.image));
         await Product.destroy({
             where: { id: req.params.id }
         })
